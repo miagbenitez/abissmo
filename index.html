@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#071012">
+    <meta
+      name="description"
+      content="Abissmo: una expedición interactiva entre las criaturas más peligrosas del océano."
+    >
+    <title>ABISSMO — El océano no olvida</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="Abissmo, inicio">
+        <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand__name">ABISS<span>MO</span></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a class="main-nav__link is-current" href="#inicio">Inicio</a>
+        <a class="main-nav__link" href="#especies">Especies</a>
+        <a class="main-nav__link" href="#expedicion">La expedición</a>
+      </nav>
+
+      <div class="header-actions">
+        <span class="signal"><span class="signal__dot"></span> SEÑAL ESTABLE</span>
+        <button class="sound-toggle" id="immersion-toggle" type="button" aria-pressed="false">
+          <span class="sound-toggle__icon" aria-hidden="true">◉</span>
+          <span class="sound-toggle__label">INMERSIÓN</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="inicio" aria-labelledby="hero-title">
+        <img
+          class="hero__image"
+          src="https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&amp;fit=crop&amp;w=2200&amp;q=90"
+          alt="Un tiburón emerge de las sombras bajo la superficie del océano"
+          fetchpriority="high"
+        >
+        <div class="hero__shade"></div>
+        <div class="hero__content">
+          <p class="eyebrow"><span class="eyebrow__line"></span> ARCHIVO OCEÁNICO · 001</p>
+          <h1 id="hero-title">EL OCÉANO<br>NO <span>OLVIDA.</span></h1>
+          <p class="hero__copy">
+            Hay criaturas que nunca debieron ser encontradas.
+            Descendé más allá de la luz y conocé a quienes gobiernan la oscuridad.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="#especies">
+              <span>INICIAR DESCENSO</span><span aria-hidden="true">↘</span>
+            </a>
+            <a class="text-link" href="#expedicion">CONOCÉ LA EXPEDICIÓN <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+
+        <div class="hero__coordinates" aria-label="Coordenadas de la expedición">
+          <span>ATLÁNTICO NORTE</span>
+          <span>64°08′ N &nbsp; 21°56′ W</span>
+        </div>
+        <div class="depth-card">
+          <span class="depth-card__label">PROFUNDIDAD ACTUAL</span>
+          <strong>−<span id="depth-value">0380</span><small> M</small></strong>
+          <span class="depth-card__rule"><i></i></span>
+          <span class="depth-card__status">DESCENSO EN CURSO</span>
+        </div>
+        <a class="hero__scroll" href="#especies" aria-label="Desplazarse a las especies">
+          <span class="hero__scroll-line"></span> DESLIZÁ PARA DESCENDER
+        </a>
+        <span class="hero__index" aria-hidden="true">01 / 04</span>
+      </section>
+
+      <div class="data-strip" aria-label="Datos del acuario">
+        <div class="data-strip__item"><span>01</span><strong>Zona abisal</strong></div>
+        <div class="data-strip__item"><span>02</span><strong>Especies documentadas</strong></div>
+        <div class="data-strip__item"><span>03</span><strong>Nivel de riesgo: crítico</strong></div>
+        <p class="data-strip__note"><span class="data-strip__pulse"></span> NO TOCAR EL VIDRIO</p>
+      </div>
+
+      <section class="species-section section-shell" id="especies" aria-labelledby="species-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line"></span> REGISTRO DE AMENAZAS</p>
+            <h2 id="species-title">Habitantes de<br><span>las profundidades.</span></h2>
+          </div>
+          <p class="section-heading__aside">
+            No son monstruos. Son el resultado de millones de años
+            sobreviviendo donde nada más puede hacerlo.
+          </p>
+        </div>
+
+        <div class="catalog-toolbar">
+          <div class="filter-list" role="group" aria-label="Filtrar especies por tipo">
+            <button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">TODAS <span>04</span></button>
+            <button class="filter-chip" type="button" data-filter="predator" aria-pressed="false">DEPREDADORES</button>
+            <button class="filter-chip" type="button" data-filter="venom" aria-pressed="false">VENENOSAS</button>
+            <button class="filter-chip" type="button" data-filter="deep" aria-pressed="false">ABISALES</button>
+          </div>
+          <label class="search-field">
+            <span class="search-field__icon" aria-hidden="true">⌕</span>
+            <span class="visually-hidden">Buscar especie</span>
+            <input id="species-search" type="search" placeholder="BUSCAR EN EL ARCHIVO" autocomplete="off">
+            <kbd>/</kbd>
+          </label>
+        </div>
+
+        <p class="catalog-count" id="catalog-count" aria-live="polite"></p>
+        <div class="species-grid" id="species-grid"></div>
+      </section>
+
+      <section class="expedition section-shell" id="expedicion" aria-labelledby="expedition-title">
+        <div class="expedition__image-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&amp;fit=crop&amp;w=1200&amp;q=85"
+            alt="Una silueta se interna en las aguas azules"
+            loading="lazy"
+          >
+          <span class="expedition__image-caption">CÁMARA 04 · TRANSMISIÓN EN VIVO</span>
+          <span class="expedition__crosshair" aria-hidden="true">+</span>
+        </div>
+        <div class="expedition__content">
+          <p class="eyebrow"><span class="eyebrow__line"></span> NOTA DEL EQUIPO</p>
+          <h2 id="expedition-title">Entrar es<br>una elección.<br><span>Salir no.</span></h2>
+          <p>
+            Abissmo es una expedición digital a los rincones más hostiles del planeta.
+            Cada registro revela una forma distinta de sobrevivir — y una razón para
+            mantener la distancia.
+          </p>
+          <div class="expedition__meta">
+            <span>ESTADO DE LA MISIÓN</span>
+            <strong><i></i> EN CURSO — SIN FECHA DE RETORNO</strong>
+          </div>
+          <a class="text-link" href="#especies">EXPLORAR LOS REGISTROS <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+
+      <section class="warning-band" aria-label="Advertencia">
+        <div class="warning-band__inner">
+          <span aria-hidden="true">✳</span>
+          <p>LO QUE VIVE ABAJO NO NECESITA QUE LO ENCUENTRES.</p>
+          <span aria-hidden="true">✳</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand brand--footer" href="#inicio" aria-label="Abissmo, volver al inicio">
+        <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand__name">ABISS<span>MO</span></span>
+      </a>
+      <p>ARCHIVO DE VIDA MARINA · EST 2026</p>
+      <div class="photo-credits">
+        <span>FOTOS:</span>
+        <a href="https://commons.wikimedia.org/wiki/File:Jellyfish-_Underwater_world_(7448725268).jpg" target="_blank" rel="noreferrer">Shankar S. · CC BY 2.0</a>
+        <a href="https://commons.wikimedia.org/wiki/File:Greater_blue-ringed_octopus_(Hapalochlaena_lunulata)_(48272090161).jpg" target="_blank" rel="noreferrer">Rickard Zerpe · CC BY 2.0</a>
+        <a href="https://commons.wikimedia.org/wiki/File:Melanocetus_johnsonii_by_NOAA.jpg" target="_blank" rel="noreferrer">NOAA · dominio público</a>
+        <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noreferrer">licencias</a>
+      </div>
+      <a class="footer-top" href="#inicio">VOLVER A LA SUPERFICIE <span aria-hidden="true">↑</span></a>
+    </footer>
+
+    <dialog class="species-dialog" id="species-dialog" aria-labelledby="dialog-title">
+      <button class="species-dialog__close" type="button" aria-label="Cerrar ficha">×</button>
+      <div class="species-dialog__media"><img id="dialog-image" src="" alt=""></div>
+      <div class="species-dialog__body">
+        <p class="eyebrow"><span class="eyebrow__line"></span> ARCHIVO <span id="dialog-number"></span></p>
+        <h2 id="dialog-title"></h2>
+        <p class="species-dialog__latin" id="dialog-latin"></p>
+        <p class="species-dialog__description" id="dialog-description"></p>
+        <dl class="species-dialog__facts">
+          <div><dt>HÁBITAT</dt><dd id="dialog-habitat"></dd></div>
+          <div><dt>PROFUNDIDAD</dt><dd id="dialog-depth"></dd></div>
+          <div><dt>AMENAZA</dt><dd id="dialog-threat"></dd></div>
+        </dl>
+        <p class="species-dialog__warning"><span aria-hidden="true">⚠</span> OBSERVAR DESDE UNA DISTANCIA SEGURA</p>
+      </div>
+    </dialog>
+  </body>
+</html>
