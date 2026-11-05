@@ -5,7 +5,7 @@ const species = [
     name: "Tiburón blanco",
     scientific: "Carcharodon carcharias",
     type: "predator",
-    tags: ["predator"],
+    tags: ["predator", "biome-open"],
     danger: "DEPREDADOR",
     depth: "0 — 1.200 m",
     habitat: "Aguas templadas y costeras",
@@ -21,7 +21,7 @@ const species = [
     name: "Medusa caja",
     scientific: "Chironex fleckeri",
     type: "venom",
-    tags: ["venom"],
+    tags: ["venom", "biome-reef", "biome-open"],
     danger: "VENENO NEUROTÓXICO",
     depth: "Superficie — 20 m",
     habitat: "Indo-Pacífico tropical",
@@ -37,7 +37,7 @@ const species = [
     name: "Pulpo de anillos azules",
     scientific: "Hapalochlaena lunulata",
     type: "venom",
-    tags: ["venom", "deep"],
+    tags: ["venom", "deep", "biome-reef"],
     danger: "TOXINA LETAL",
     depth: "0 — 50 m",
     habitat: "Arrecifes del Pacífico",
@@ -53,7 +53,7 @@ const species = [
     name: "Pez rape abisal",
     scientific: "Melanocetus johnsonii",
     type: "deep",
-    tags: ["predator", "deep"],
+    tags: ["predator", "deep", "biome-abyss"],
     danger: "CAZADOR ABISAL",
     depth: "200 — 2.000 m",
     habitat: "Océanos Atlántico y Antártico",
@@ -70,14 +70,59 @@ const searchInput = document.querySelector("#species-search");
 const catalogCount = document.querySelector("#catalog-count");
 const dialog = document.querySelector("#species-dialog");
 const activeFilters = document.querySelectorAll("[data-filter]");
+const biomeFilterButtons = document.querySelectorAll("[data-biome-filter]");
+const biomeFilterNotice = document.querySelector("#biome-filter-notice");
+const biomeFilterLabel = document.querySelector("#biome-filter-label");
+const hero = document.querySelector(".hero");
+const descent = document.querySelector("#descenso");
+const depthZones = [...document.querySelectorAll(".depth-zone")];
+const depthMarkers = document.querySelectorAll(".depth-console__marker");
+const depthConsole = document.querySelector("#depth-console");
+const navLinks = document.querySelectorAll(".main-nav__link");
+const flashlightToggle = document.querySelector("#flashlight-toggle");
+let pointerFrame = 0;
+let pointerPosition = null;
+const depthLabels = {
+  surface: "ZONA FÓTICA",
+  twilight: "ZONA DE PENUMBRA",
+  abyss: "ZONA BATIPELÁGICA"
+};
+const zoneColors = {
+  surface: "#071012",
+  twilight: "#07151b",
+  abyss: "#100d16"
+};
+const zoneTargets = {
+  surface: "#zona-superficial",
+  twilight: "#zona-penumbra",
+  abyss: "#zona-abisal"
+};
+const navRatios = new Map();
+const navSections = [...document.querySelectorAll("#biomas, #especies, #expedicion")];
+const biomeLabels = {
+  reef: "ARRECIFES",
+  open: "AGUAS ABIERTAS",
+  abyss: "ZONA ABISAL"
+};
+const ambientMotionObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    entry.target.classList.toggle("is-in-view", entry.isIntersecting);
+  });
+}, { threshold: 0.05 });
+const ambientMotionTargets = ".hero, .depth-zone, .biome-card, .species-card, .expedition__image-wrap";
 let selectedFilter = "all";
+let selectedBiome = null;
+let activeDepthZone = null;
+let depthFrame = 0;
+const depthRatios = new Map([[hero, 0], ...depthZones.map((zone) => [zone, 0])]);
 
 function renderSpecies() {
   const query = searchInput.value.trim().toLocaleLowerCase("es");
   const matchingSpecies = species.filter((animal) => {
     const matchesFilter = selectedFilter === "all" || animal.tags.includes(selectedFilter);
+    const matchesBiome = !selectedBiome || animal.tags.includes(`biome-${selectedBiome}`);
     const searchableText = `${animal.name} ${animal.scientific} ${animal.habitat}`.toLocaleLowerCase("es");
-    return matchesFilter && searchableText.includes(query);
+    return matchesFilter && matchesBiome && searchableText.includes(query);
   });
 
   catalogCount.textContent = `${String(matchingSpecies.length).padStart(2, "0")} REGISTROS ENCONTRADOS`;
@@ -107,6 +152,7 @@ function renderSpecies() {
       </div>
     </article>
   `).join("");
+  grid.querySelectorAll(ambientMotionTargets).forEach((target) => ambientMotionObserver.observe(target));
 }
 
 function openSpeciesRecord(animal) {
@@ -134,6 +180,32 @@ activeFilters.forEach((button) => {
   });
 });
 
+function selectBiome(biome, resetCategory = Boolean(biome)) {
+  selectedBiome = biome;
+  if (resetCategory) selectedFilter = "all";
+  activeFilters.forEach((button) => {
+    const isActive = button.dataset.filter === selectedFilter;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+  biomeFilterNotice.hidden = !biome;
+  biomeFilterLabel.textContent = biome ? `BIOMA SELECCIONADO: ${biomeLabels[biome]}` : "";
+  biomeFilterButtons.forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.biomeFilter === biome));
+  });
+  renderSpecies();
+}
+
+biomeFilterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    selectBiome(button.dataset.biomeFilter);
+    document.querySelector("#especies").scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+    });
+  });
+});
+
+document.querySelector("#clear-biome-filter").addEventListener("click", () => selectBiome(null, false));
 searchInput.addEventListener("input", renderSpecies);
 
 grid.addEventListener("click", (event) => {
@@ -155,9 +227,158 @@ document.querySelector("#immersion-toggle").addEventListener("click", (event) =>
   button.setAttribute("aria-pressed", String(isImmersed));
   document.body.classList.toggle("immersion-mode", isImmersed);
   document.querySelector(".sound-toggle__label").textContent = isImmersed ? "EN INMERSIÓN" : "INMERSIÓN";
-  document.querySelector("#depth-value").textContent = isImmersed ? "0912" : "0380";
-  document.querySelector(".depth-card__status").textContent = isImmersed ? "ZONA ABISAL" : "DESCENSO EN CURSO";
 });
+
+function updateFlashlightPosition(event) {
+  pointerPosition = { x: event.clientX, y: event.clientY };
+  if (pointerFrame) return;
+
+  pointerFrame = window.requestAnimationFrame(() => {
+    pointerFrame = 0;
+    document.body.style.setProperty("--flashlight-x", `${pointerPosition.x}px`);
+    document.body.style.setProperty("--flashlight-y", `${pointerPosition.y}px`);
+  });
+}
+
+document.addEventListener("pointermove", updateFlashlightPosition, { passive: true });
+
+flashlightToggle.addEventListener("click", () => {
+  const isOn = flashlightToggle.getAttribute("aria-pressed") !== "true";
+  flashlightToggle.setAttribute("aria-pressed", String(isOn));
+  document.body.classList.toggle("flashlight-on", isOn);
+  flashlightToggle.querySelector(".sound-toggle__label").textContent = isOn ? "LINTERNA ON" : "LINTERNA";
+});
+
+function updateDepthReading(zone, progress = 0) {
+  const start = Number(zone.dataset.depthStart);
+  const end = Number(zone.dataset.depthEnd);
+  const depth = Math.round(start + (end - start) * progress);
+  const formattedDepth = String(depth).padStart(4, "0");
+  const totalProgress = Math.min((depth / 4000) * 100, 100);
+  const zoneLabel = depthLabels[zone.dataset.zone];
+  const consoleLabel = document.querySelector("#depth-zone-label");
+  const heroLabel = document.querySelector(".depth-card__status");
+
+  document.querySelector("#depth-value").textContent = formattedDepth;
+  document.querySelector("#depth-console-value").textContent = formattedDepth;
+  if (consoleLabel.textContent !== zoneLabel) consoleLabel.textContent = zoneLabel;
+  if (heroLabel.textContent !== zoneLabel) heroLabel.textContent = zoneLabel;
+  document.querySelector(".depth-card__rule i").style.width = `${Math.max(totalProgress, 2.5)}%`;
+  document.body.style.setProperty("--descent-progress", `${totalProgress}%`);
+}
+
+function updateActiveDepthZone(zone) {
+  if (!zone || activeDepthZone === zone) return;
+
+  activeDepthZone = zone;
+  document.body.dataset.depthZone = zone.dataset.depthZone || zone.dataset.zone;
+
+  const zoneIndex = depthZones.indexOf(zone);
+  depthZones.forEach((depthZone, index) => {
+    depthZone.classList.toggle("is-active", depthZone === zone);
+    depthMarkers[index].classList.toggle("is-active", depthZone === zone);
+    depthMarkers[index].classList.toggle("is-passed", index < zoneIndex);
+    depthMarkers[index].setAttribute("aria-current", depthZone === zone ? "location" : "false");
+  });
+
+  navLinks.forEach((link) => {
+    link.classList.toggle("is-current", link.hash === (zone === hero ? "#inicio" : "#descenso"));
+  });
+
+  if (zone === hero) {
+    document.querySelector("#depth-value").textContent = "0000";
+    document.querySelector("#depth-console-value").textContent = "0000";
+    document.querySelector(".depth-card__status").textContent = "SUPERFICIE · LUZ SOLAR";
+    document.querySelector("#depth-zone-label").textContent = depthLabels.surface;
+    document.querySelector(".depth-card__rule i").style.width = "2.5%";
+    document.body.style.setProperty("--descent-progress", "0%");
+    depthZones.forEach((depthZone) => depthZone.classList.remove("is-active"));
+    depthMarkers.forEach((marker, index) => {
+      marker.classList.toggle("is-active", index === 0);
+      marker.classList.remove("is-passed");
+      marker.setAttribute("aria-current", index === 0 ? "location" : "false");
+    });
+    document.querySelector('meta[name="theme-color"]').content = zoneColors.surface;
+    return;
+  }
+
+  document.querySelector('meta[name="theme-color"]').content = zoneColors[zone.dataset.zone];
+  updateDepthReading(zone);
+}
+
+function updateScrollDepth() {
+  depthFrame = 0;
+  if (!activeDepthZone || activeDepthZone === hero) return;
+
+  const bounds = activeDepthZone.getBoundingClientRect();
+  const scrollDistance = bounds.height + window.innerHeight * 0.3;
+  const progress = Math.max(0, Math.min(
+    (window.innerHeight * 0.72 - bounds.top) / scrollDistance,
+    1
+  ));
+  updateDepthReading(activeDepthZone, progress);
+}
+
+function scheduleDepthUpdate() {
+  if (depthFrame) return;
+  depthFrame = window.requestAnimationFrame(updateScrollDepth);
+}
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  let mostVisibleZone = null;
+  let highestRatio = 0.15;
+
+  entries.forEach((entry) => {
+    depthRatios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+  });
+
+  depthRatios.forEach((ratio, zone) => {
+    if (ratio > highestRatio) {
+      mostVisibleZone = zone;
+      highestRatio = ratio;
+    }
+  });
+
+  if (mostVisibleZone) updateActiveDepthZone(mostVisibleZone);
+}, { threshold: [0.15, 0.3, 0.5, 0.7, 0.9] });
+
+sectionObserver.observe(hero);
+depthZones.forEach((zone) => sectionObserver.observe(zone));
+
+document.querySelectorAll(ambientMotionTargets).forEach((target) => ambientMotionObserver.observe(target));
+
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    navRatios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+  });
+
+  const [visibleSection] = [...navRatios.entries()]
+    .filter(([, ratio]) => ratio > 0)
+    .sort((first, second) => second[1] - first[1]);
+  const activeSection = visibleSection ? `#${visibleSection[0].id}` : (activeDepthZone === hero ? "#inicio" : "#descenso");
+
+  navLinks.forEach((link) => {
+    link.classList.toggle("is-current", link.hash === activeSection);
+  });
+}, { threshold: [0.1, 0.25, 0.5, 0.75] });
+
+navSections.forEach((section) => navObserver.observe(section));
+
+const descentObserver = new IntersectionObserver(([entry]) => {
+  depthConsole.hidden = !entry.isIntersecting;
+}, { threshold: 0.01 });
+descentObserver.observe(descent);
+
+depthMarkers.forEach((marker) => {
+  marker.addEventListener("click", () => {
+    document.querySelector(zoneTargets[marker.dataset.targetZone]).scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+    });
+  });
+});
+
+window.addEventListener("scroll", scheduleDepthUpdate, { passive: true });
+window.addEventListener("resize", scheduleDepthUpdate);
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "/" && document.activeElement !== searchInput && !dialog.open) {

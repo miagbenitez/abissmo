@@ -27,6 +27,8 @@
 
       <nav class="main-nav" aria-label="Navegación principal">
         <a class="main-nav__link is-current" href="#inicio">Inicio</a>
+        <a class="main-nav__link" href="#descenso">Descenso</a>
+        <a class="main-nav__link" href="#biomas">Biomas</a>
         <a class="main-nav__link" href="#especies">Especies</a>
         <a class="main-nav__link" href="#expedicion">La expedición</a>
       </nav>
@@ -37,11 +39,17 @@
           <span class="sound-toggle__icon" aria-hidden="true">◉</span>
           <span class="sound-toggle__label">INMERSIÓN</span>
         </button>
+        <button class="sound-toggle flashlight-toggle" id="flashlight-toggle" type="button" aria-pressed="false">
+          <span class="sound-toggle__icon flashlight-toggle__icon" aria-hidden="true">◉</span>
+          <span class="sound-toggle__label">LINTERNA</span>
+        </button>
       </div>
     </header>
 
+    <div class="flashlight-overlay" id="flashlight-overlay" aria-hidden="true"></div>
+
     <main>
-      <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <section class="hero" id="inicio" data-depth-zone="surface" aria-labelledby="hero-title">
         <img
           class="hero__image"
           src="https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&amp;fit=crop&amp;w=2200&amp;q=90"
@@ -57,7 +65,7 @@
             Descendé más allá de la luz y conocé a quienes gobiernan la oscuridad.
           </p>
           <div class="hero__actions">
-            <a class="button button--primary" href="#especies">
+            <a class="button button--primary" href="#zona-superficial">
               <span>INICIAR DESCENSO</span><span aria-hidden="true">↘</span>
             </a>
             <a class="text-link" href="#expedicion">CONOCÉ LA EXPEDICIÓN <span aria-hidden="true">↗</span></a>
@@ -70,11 +78,11 @@
         </div>
         <div class="depth-card">
           <span class="depth-card__label">PROFUNDIDAD ACTUAL</span>
-          <strong>−<span id="depth-value">0380</span><small> M</small></strong>
+          <strong>−<span id="depth-value">0000</span><small> M</small></strong>
           <span class="depth-card__rule"><i></i></span>
-          <span class="depth-card__status">DESCENSO EN CURSO</span>
+          <span class="depth-card__status">SUPERFICIE · LUZ SOLAR</span>
         </div>
-        <a class="hero__scroll" href="#especies" aria-label="Desplazarse a las especies">
+        <a class="hero__scroll" href="#zona-superficial" aria-label="Desplazarse a la zona iluminada">
           <span class="hero__scroll-line"></span> DESLIZÁ PARA DESCENDER
         </a>
         <span class="hero__index" aria-hidden="true">01 / 04</span>
@@ -86,6 +94,165 @@
         <div class="data-strip__item"><span>03</span><strong>Nivel de riesgo: crítico</strong></div>
         <p class="data-strip__note"><span class="data-strip__pulse"></span> NO TOCAR EL VIDRIO</p>
       </div>
+
+      <section class="descent" id="descenso" aria-labelledby="descent-title">
+        <div class="descent__intro section-shell">
+          <p class="eyebrow"><span class="eyebrow__line"></span> DESCENSO BATIMÉTRICO · ATLÁNTICO NORTE</p>
+          <h2 id="descent-title">Cada metro nos aleja<br><span>un poco más de la luz.</span></h2>
+          <p>Tres zonas. Tres mundos. La misma pregunta: ¿qué hay más abajo?</p>
+        </div>
+
+        <article class="depth-zone depth-zone--surface" id="zona-superficial"
+          data-zone="surface" data-depth-start="0" data-depth-end="200"
+          aria-labelledby="surface-title">
+          <img class="depth-zone__image"
+            src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Colorful_underwater_landscape_of_a_coral_reef.jpg/1920px-Colorful_underwater_landscape_of_a_coral_reef.jpg"
+            alt="Arrecife de coral lleno de luz y color bajo la superficie"
+            loading="lazy">
+          <div class="depth-zone__content">
+            <p class="eyebrow"><span class="eyebrow__line"></span> 01 · ZONA FÓTICA</p>
+            <h3 id="surface-title">Donde todavía<br>llega la luz.</h3>
+            <p>La superficie aún guarda colores. Entre arrecifes y corrientes, la vida se mueve a plena vista. Pero incluso aquí, algo espera en silencio.</p>
+            <div class="depth-zone__facts">
+              <span>PROFUNDIDAD <strong>0 — 200 M</strong></span>
+              <span>LUZ <strong>PLENA · AZUL</strong></span>
+            </div>
+            <a class="button button--ghost" href="#zona-penumbra">
+              <span>BAJAR A LA PENUMBRA</span><span aria-hidden="true">↓</span>
+            </a>
+          </div>
+          <span class="depth-zone__coordinates">LUZ SOLAR · 64°08′ N</span>
+        </article>
+
+        <article class="depth-zone depth-zone--twilight" id="zona-penumbra"
+          data-zone="twilight" data-depth-start="200" data-depth-end="1000"
+          aria-labelledby="twilight-title">
+          <img class="depth-zone__image"
+            src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Tibur%C3%B3n_azul_%28Prionace_glauca%29_y_submarinista%2C_canal_Fayal-Pico%2C_islas_Azores%2C_Portugal%2C_2020-07-27%2C_DD_08.jpg/1920px-Tibur%C3%B3n_azul_%28Prionace_glauca%29_y_submarinista%2C_canal_Fayal-Pico%2C_islas_Azores%2C_Portugal%2C_2020-07-27%2C_DD_08.jpg"
+            alt="Un tiburón azul se acerca a un buzo en aguas cada vez más oscuras"
+            loading="lazy">
+          <div class="depth-zone__content">
+            <p class="eyebrow"><span class="eyebrow__line"></span> 02 · ZONA MESOPELÁGICA</p>
+            <h3 id="twilight-title">La penumbra<br>tiene ojos.</h3>
+            <p>La luz se rompe y el azul se vuelve tinta. A cientos de metros, las siluetas desaparecen y cada destello puede ser una señal… o una trampa.</p>
+            <div class="depth-zone__facts">
+              <span>PROFUNDIDAD <strong>200 — 1.000 M</strong></span>
+              <span>LUZ <strong>ESCASA · AZUL PROFUNDO</strong></span>
+            </div>
+            <a class="button button--ghost" href="#zona-abisal">
+              <span>CONTINUAR AL ABISMO</span><span aria-hidden="true">↓</span>
+            </a>
+          </div>
+          <span class="depth-zone__coordinates">ZONA DE PENUMBRA · SIN SOL DIRECTO</span>
+        </article>
+
+        <article class="depth-zone depth-zone--abyss" id="zona-abisal"
+          data-zone="abyss" data-depth-start="1000" data-depth-end="4000"
+          aria-labelledby="abyss-title">
+          <img class="depth-zone__image"
+            src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Melanocetus_johnsonii_by_NOAA.jpg/1920px-Melanocetus_johnsonii_by_NOAA.jpg"
+            alt="Pez rape de aguas profundas emerge de la oscuridad absoluta"
+            loading="lazy">
+          <div class="depth-zone__content">
+            <p class="eyebrow"><span class="eyebrow__line"></span> 03 · ZONA BATIPELÁGICA</p>
+            <h3 id="abyss-title">La oscuridad<br>está viva.</h3>
+            <p>La noche es total. La presión, inmensa. Aquí abajo, la vida inventó su propia luz y sobrevivir significa no ser visto… hasta el último segundo.</p>
+            <div class="depth-zone__facts">
+              <span>PROFUNDIDAD <strong>1.000 — 4.000 M</strong></span>
+              <span>LUZ <strong>NINGUNA · BIOILUMINISCENCIA</strong></span>
+            </div>
+            <a class="button button--ghost" href="#especies">
+              <span>ABRIR ARCHIVO DE CRIATURAS</span><span aria-hidden="true">↗</span>
+            </a>
+          </div>
+          <span class="depth-zone__coordinates">ABISMO · TRANSMISIÓN INTERMITENTE</span>
+        </article>
+
+        <aside class="depth-console" id="depth-console" aria-label="Progreso del descenso" hidden>
+          <span class="depth-console__label">PROFUNDIDAD</span>
+          <strong>−<span id="depth-console-value">0000</span><small> M</small></strong>
+          <span class="depth-console__zone" id="depth-zone-label" role="status" aria-live="polite">ZONA FÓTICA</span>
+          <div class="depth-console__track" role="group" aria-label="Ir a una zona del descenso">
+            <span class="depth-console__fill" id="depth-console-fill" aria-hidden="true"></span>
+            <button type="button" class="depth-console__marker" data-target-zone="surface" aria-label="Ir a la zona iluminada"></button>
+            <button type="button" class="depth-console__marker" data-target-zone="twilight" aria-label="Ir a la zona de penumbra"></button>
+            <button type="button" class="depth-console__marker" data-target-zone="abyss" aria-label="Ir a la zona abisal"></button>
+          </div>
+          <span class="depth-console__hint">SEGUÍ DESCENDIENDO</span>
+        </aside>
+      </section>
+
+      <section class="biomes section-shell" id="biomas" aria-labelledby="biomes-title">
+        <div class="section-heading biomes__heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line"></span> CARTOGRAFÍA DE LO DESCONOCIDO</p>
+            <h2 id="biomes-title">Tres mundos.<br><span>Un solo océano.</span></h2>
+          </div>
+          <p class="section-heading__aside">
+            Elegí un hábitat para conocer su paisaje y las criaturas capaces de sobrevivir en él.
+          </p>
+        </div>
+
+        <div class="biome-grid" aria-label="Explorar biomas oceánicos">
+          <article class="biome-card biome-card--reef">
+            <img class="biome-card__image"
+              src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Colorful_underwater_landscape_of_a_coral_reef.jpg/1920px-Colorful_underwater_landscape_of_a_coral_reef.jpg"
+              alt="Corales de colores en un arrecife bañado por la luz solar"
+              loading="lazy">
+            <div class="biome-card__content">
+              <p class="biome-card__index">HÁBITAT 01 <span>·</span> ZONA COSTERA</p>
+              <h3>Arrecifes</h3>
+              <p>Un laberinto de coral donde la vida se esconde a plena luz.</p>
+              <div class="biome-card__data">
+                <span>HASTA 200 M</span><span>LUZ SOLAR</span>
+              </div>
+              <div class="biome-card__actions">
+                <a class="biome-card__link" href="#zona-superficial">EXPLORAR HÁBITAT <span aria-hidden="true">↗</span></a>
+                <button class="biome-card__filter" type="button" data-biome-filter="reef" aria-pressed="false" aria-label="Ver especies de arrecife">VER 02 ESPECIES</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="biome-card biome-card--open">
+            <img class="biome-card__image"
+              src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Tibur%C3%B3n_azul_%28Prionace_glauca%29_y_submarinista%2C_canal_Fayal-Pico%2C_islas_Azores%2C_Portugal%2C_2020-07-27%2C_DD_08.jpg/1920px-Tibur%C3%B3n_azul_%28Prionace_glauca%29_y_submarinista%2C_canal_Fayal-Pico%2C_islas_Azores%2C_Portugal%2C_2020-07-27%2C_DD_08.jpg"
+              alt="Tiburón azul y buzo en las aguas abiertas del Atlántico"
+              loading="lazy">
+            <div class="biome-card__content">
+              <p class="biome-card__index">HÁBITAT 02 <span>·</span> MAR ABIERTO</p>
+              <h3>Aguas abiertas</h3>
+              <p>Un océano sin refugio: corrientes inmensas y cazadores a la deriva.</p>
+              <div class="biome-card__data">
+                <span>SUPERFICIE — 1.000 M</span><span>AZUL PROFUNDO</span>
+              </div>
+              <div class="biome-card__actions">
+                <a class="biome-card__link" href="#zona-penumbra">EXPLORAR HÁBITAT <span aria-hidden="true">↗</span></a>
+                <button class="biome-card__filter" type="button" data-biome-filter="open" aria-pressed="false" aria-label="Ver especies de aguas abiertas">VER 02 ESPECIES</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="biome-card biome-card--abyss">
+            <img class="biome-card__image"
+              src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Melanocetus_johnsonii_by_NOAA.jpg/1920px-Melanocetus_johnsonii_by_NOAA.jpg"
+              alt="Pez rape bioluminiscente en la oscuridad de las profundidades"
+              loading="lazy">
+            <div class="biome-card__content">
+              <p class="biome-card__index">HÁBITAT 03 <span>·</span> OCÉANO PROFUNDO</p>
+              <h3>Zona abisal</h3>
+              <p>Noche eterna, presión extrema y una luz que solo pertenece a sus habitantes.</p>
+              <div class="biome-card__data">
+                <span>1.000 — 4.000 M</span><span>SIN LUZ SOLAR</span>
+              </div>
+              <div class="biome-card__actions">
+                <a class="biome-card__link" href="#zona-abisal">EXPLORAR HÁBITAT <span aria-hidden="true">↗</span></a>
+                <button class="biome-card__filter" type="button" data-biome-filter="abyss" aria-pressed="false" aria-label="Ver especies de la zona abisal">VER 01 ESPECIE</button>
+              </div>
+            </div>
+          </article>
+        </div>
+        <p class="biomes__note"><span aria-hidden="true">✳</span> CADA BIOMA TIENE SUS PROPIAS REGLAS. NINGUNO ES SEGURO.</p>
+      </section>
 
       <section class="species-section section-shell" id="especies" aria-labelledby="species-title">
         <div class="section-heading">
@@ -114,6 +281,11 @@
           </label>
         </div>
 
+        <div class="biome-filter-notice" id="biome-filter-notice" hidden>
+          <span class="biome-filter-notice__indicator" aria-hidden="true"></span>
+          <span id="biome-filter-label"></span>
+          <button type="button" id="clear-biome-filter">MOSTRAR TODOS LOS HÁBITATS <span aria-hidden="true">×</span></button>
+        </div>
         <p class="catalog-count" id="catalog-count" aria-live="polite"></p>
         <div class="species-grid" id="species-grid"></div>
       </section>
@@ -164,6 +336,8 @@
         <a href="https://commons.wikimedia.org/wiki/File:Jellyfish-_Underwater_world_(7448725268).jpg" target="_blank" rel="noreferrer">Shankar S. · CC BY 2.0</a>
         <a href="https://commons.wikimedia.org/wiki/File:Greater_blue-ringed_octopus_(Hapalochlaena_lunulata)_(48272090161).jpg" target="_blank" rel="noreferrer">Rickard Zerpe · CC BY 2.0</a>
         <a href="https://commons.wikimedia.org/wiki/File:Melanocetus_johnsonii_by_NOAA.jpg" target="_blank" rel="noreferrer">NOAA · dominio público</a>
+        <a href="https://commons.wikimedia.org/wiki/File:Colorful_underwater_landscape_of_a_coral_reef.jpg" target="_blank" rel="noreferrer">USFWS · dominio público</a>
+        <a href="https://commons.wikimedia.org/wiki/File:Tibur%C3%B3n_azul_(Prionace_glauca)_y_submarinista,_canal_Fayal-Pico,_islas_Azores,_Portugal,_2020-07-27,_DD_08.jpg" target="_blank" rel="noreferrer">Diego Delso · CC BY-SA 4.0</a>
         <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noreferrer">licencias</a>
       </div>
       <a class="footer-top" href="#inicio">VOLVER A LA SUPERFICIE <span aria-hidden="true">↑</span></a>
