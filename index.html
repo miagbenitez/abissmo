@@ -35,7 +35,13 @@
 
       <div class="header-actions">
         <span class="signal"><span class="signal__dot"></span> SEÑAL ESTABLE</span>
-        <button class="sound-toggle" id="immersion-toggle" type="button" aria-pressed="false">
+        <button
+          class="sound-toggle"
+          id="immersion-toggle"
+          type="button"
+          aria-pressed="false"
+          aria-label="Activar el modo inmersión y el sonido submarino"
+        >
           <span class="sound-toggle__icon" aria-hidden="true">◉</span>
           <span class="sound-toggle__label">INMERSIÓN</span>
         </button>
@@ -46,6 +52,7 @@
       </div>
     </header>
 
+    <span class="visually-hidden" id="immersion-status" role="status" aria-live="polite"></span>
     <div class="flashlight-overlay" id="flashlight-overlay" aria-hidden="true"></div>
 
     <main>
@@ -251,6 +258,71 @@
             </div>
           </article>
         </div>
+        <div class="abyss-map" role="region" aria-labelledby="abyss-map-title">
+          <div class="abyss-map__heading">
+            <div>
+              <p class="eyebrow"><span class="eyebrow__line"></span> DISTRIBUCIÓN OCEÁNICA</p>
+              <h3 id="abyss-map-title">El mapa de lo<br><span>que acecha abajo.</span></h3>
+            </div>
+            <p class="abyss-map__intro">Explorá las zonas registradas y descubrí qué habitantes se esconden en cada océano.</p>
+          </div>
+          <div class="abyss-map__canvas">
+            <svg class="abyss-map__world" viewBox="0 0 1000 500" aria-hidden="true" focusable="false">
+              <defs>
+                <pattern id="map-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                  <path d="M 50 0 L 0 0 0 50" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect width="1000" height="500" fill="url(#map-grid)"/>
+              <g class="abyss-map__graticule" fill="none" stroke="currentColor" stroke-opacity=".16" stroke-width="1">
+                <path d="M0 125h1000M0 250h1000M0 375h1000"/>
+                <path d="M250 0v500M500 0v500M750 0v500"/>
+              </g>
+              <g class="abyss-map__land">
+                <path d="m88 99 40-28 59 5 26 24 48 4 25 36-19 27-34 9-17 37-31 13-9 42-25 16-8-37-27-19 7-34-31-21-26-41 12-33-10-25z"/>
+                <path d="m270 246 34 8 25 31-4 36 22 30-10 45-22 49-18 39-16-26-6-52-23-33 10-42-21-33 12-33z"/>
+                <path d="m429 91 48-21 56 10 29-19 63 13 19-17 78 13 34 31 64-4 45 34-15 26-61 8-20 23-45-4-25 30-39 4-22 34-33-14-12-42-36-16-21-29-44-11-31-24-42-3-31 23-29-20-42 5-24-24z"/>
+                <path d="m458 231 35-20 49 12 23 37-19 25-8 43-34 34-18 61-28-28-6-55-21-34 12-37-10-38z"/>
+                <path d="m739 339 51-20 57 13 23 31-19 31-59 13-44-20-25-24z"/>
+                <path d="m856 231 13-6 10 11-8 13-12-4z"/>
+                <path d="M0 454q250 35 500 0t500 0v46H0z"/>
+              </g>
+              <g class="abyss-map__labels" aria-hidden="true">
+                <text x="202" y="185">AMÉRICA</text>
+                <text x="530" y="167">EUROPA</text>
+                <text x="500" y="322">ÁFRICA</text>
+                <text x="820" y="293">ASIA</text>
+              </g>
+            </svg>
+            <span class="abyss-map__coordinates abyss-map__coordinates--top">MAPA ESQUEMÁTICO · DISTRIBUCIÓN GENERAL</span>
+            <span class="abyss-map__coordinates abyss-map__coordinates--bottom">ABISSMO · CARTOGRAFÍA DE ESPECIES</span>
+            <button class="abyss-map__marker abyss-map__marker--atlantic" type="button" data-map-region="atlantic" aria-pressed="false" aria-label="Explorar Atlántico norte: 00 especies">
+              <span class="abyss-map__pulse" aria-hidden="true"></span>
+              <span class="abyss-map__label">ATLÁNTICO NORTE <strong class="abyss-map__count">00</strong></span>
+            </button>
+            <button class="abyss-map__marker abyss-map__marker--indo-pacific" type="button" data-map-region="indo-pacific" aria-pressed="false" aria-label="Explorar Indo-Pacífico: 00 especies">
+              <span class="abyss-map__pulse" aria-hidden="true"></span>
+              <span class="abyss-map__label">INDO-PACÍFICO <strong class="abyss-map__count">00</strong></span>
+            </button>
+            <button class="abyss-map__marker abyss-map__marker--pacific" type="button" data-map-region="pacific" aria-pressed="false" aria-label="Explorar Pacífico: 00 especies">
+              <span class="abyss-map__pulse" aria-hidden="true"></span>
+              <span class="abyss-map__label">PACÍFICO <strong class="abyss-map__count">00</strong></span>
+            </button>
+            <button class="abyss-map__marker abyss-map__marker--indian" type="button" data-map-region="indian" aria-pressed="false" aria-label="Explorar océano Índico: 00 especies">
+              <span class="abyss-map__pulse" aria-hidden="true"></span>
+              <span class="abyss-map__label">OCÉANO ÍNDICO <strong class="abyss-map__count">00</strong></span>
+            </button>
+            <button class="abyss-map__marker abyss-map__marker--southern" type="button" data-map-region="southern" aria-pressed="false" aria-label="Explorar océano Austral: 00 especies">
+              <span class="abyss-map__pulse" aria-hidden="true"></span>
+              <span class="abyss-map__label">OCÉANO AUSTRAL <strong class="abyss-map__count">00</strong></span>
+            </button>
+          </div>
+          <div class="abyss-map__footer">
+            <p id="map-region-status" role="status" aria-live="polite">SELECCIONÁ UNA ZONA PARA EXPLORAR SUS ESPECIES</p>
+            <button type="button" id="clear-map-filter">LIMPIAR ZONA <span aria-hidden="true">×</span></button>
+          </div>
+          <p class="abyss-map__note">LAS ZONAS SON REFERENCIALES. LA DISTRIBUCIÓN REAL PUEDE VARIAR SEGÚN LA ESPECIE.</p>
+        </div>
         <p class="biomes__note"><span aria-hidden="true">✳</span> CADA BIOMA TIENE SUS PROPIAS REGLAS. NINGUNO ES SEGURO.</p>
       </section>
 
@@ -279,6 +351,15 @@
             <input id="species-search" type="search" placeholder="BUSCAR EN EL ARCHIVO" autocomplete="off">
             <kbd>/</kbd>
           </label>
+        </div>
+        <div class="surprise-encounter">
+          <div class="surprise-encounter__copy">
+            <span class="surprise-encounter__signal" aria-hidden="true">✳</span>
+            <p>SEÑAL INESPERADA <span>— NO SABEMOS QUÉ VA A RESPONDER.</span></p>
+          </div>
+          <button class="surprise-encounter__button" id="surprise-encounter" type="button">
+            <span aria-hidden="true">↯</span> ENCONTRAR UNA ESPECIE <span aria-hidden="true">↗</span>
+          </button>
         </div>
 
         <div class="biome-filter-notice" id="biome-filter-notice" hidden>
@@ -351,10 +432,30 @@
         <h2 id="dialog-title"></h2>
         <p class="species-dialog__latin" id="dialog-latin"></p>
         <p class="species-dialog__description" id="dialog-description"></p>
+        <div class="species-dialog__risk">
+          <div class="species-dialog__risk-heading">
+            <span>PELIGRO POTENCIAL · ESCALA ABISSMO</span>
+            <strong id="dialog-risk-value"></strong>
+          </div>
+          <div
+            class="species-dialog__risk-meter"
+            id="dialog-risk-meter"
+            role="meter"
+            aria-label="Nivel de peligro potencial según la escala editorial Abissmo"
+            aria-valuemin="1"
+            aria-valuemax="5"
+            aria-valuenow="1"
+          >
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
         <dl class="species-dialog__facts">
           <div><dt>HÁBITAT</dt><dd id="dialog-habitat"></dd></div>
           <div><dt>PROFUNDIDAD</dt><dd id="dialog-depth"></dd></div>
           <div><dt>AMENAZA</dt><dd id="dialog-threat"></dd></div>
+          <div><dt>TAMAÑO</dt><dd id="dialog-size"></dd></div>
+          <div><dt>LONGEVIDAD</dt><dd id="dialog-longevity"></dd></div>
+          <div><dt>ALIMENTACIÓN</dt><dd id="dialog-diet"></dd></div>
         </dl>
         <p class="species-dialog__warning"><span aria-hidden="true">⚠</span> OBSERVAR DESDE UNA DISTANCIA SEGURA</p>
       </div>

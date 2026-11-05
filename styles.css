@@ -260,6 +260,11 @@ button {
   color: #fff;
 }
 
+.sound-toggle:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 .sound-toggle__icon {
   color: var(--accent-bright);
   font-size: 14px;
@@ -290,6 +295,149 @@ button {
       rgba(1, 5, 9, 0.9) 100%
     );
   transition: opacity 220ms ease;
+}
+
+.marine-particles {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.marine-particles::before {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    radial-gradient(1.5px 1.5px at 11% 22%, rgba(201, 239, 239, 0.44) 50%, transparent 100%),
+    radial-gradient(2px 2px at 31% 68%, rgba(201, 239, 239, 0.3) 50%, transparent 100%),
+    radial-gradient(1px 1px at 56% 37%, rgba(201, 239, 239, 0.42) 50%, transparent 100%),
+    radial-gradient(2px 2px at 78% 79%, rgba(201, 239, 239, 0.3) 50%, transparent 100%),
+    radial-gradient(1px 1px at 91% 18%, rgba(201, 239, 239, 0.36) 50%, transparent 100%);
+  background-size: 340px 310px;
+  content: "";
+  opacity: 0.52;
+  animation: sediment-drift 58s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+
+.marine-particles span {
+  position: absolute;
+  bottom: -8%;
+  left: var(--particle-x, 50%);
+  width: var(--particle-size, 5px);
+  height: var(--particle-size, 5px);
+  border: 1px solid rgba(200, 237, 239, 0.44);
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, rgba(218, 249, 246, 0.65), rgba(92, 175, 190, 0.07) 58%, transparent 72%);
+  box-shadow: 0 0 10px rgba(125, 201, 210, 0.14);
+  opacity: 0;
+  animation: particle-rise var(--particle-duration, 19s) var(--particle-delay, 0s) linear infinite;
+  animation-play-state: paused;
+}
+
+.marine-particles span:nth-child(1) {
+  --particle-x: 8%;
+  --particle-size: 5px;
+  --particle-duration: 18s;
+  --particle-delay: -12s;
+}
+
+.marine-particles span:nth-child(2) {
+  --particle-x: 19%;
+  --particle-size: 3px;
+  --particle-duration: 24s;
+  --particle-delay: -4s;
+}
+
+.marine-particles span:nth-child(3) {
+  --particle-x: 33%;
+  --particle-size: 7px;
+  --particle-duration: 21s;
+  --particle-delay: -17s;
+}
+
+.marine-particles span:nth-child(4) {
+  --particle-x: 46%;
+  --particle-size: 4px;
+  --particle-duration: 28s;
+  --particle-delay: -8s;
+}
+
+.marine-particles span:nth-child(5) {
+  --particle-x: 58%;
+  --particle-size: 6px;
+  --particle-duration: 20s;
+  --particle-delay: -14s;
+}
+
+.marine-particles span:nth-child(6) {
+  --particle-x: 71%;
+  --particle-size: 3px;
+  --particle-duration: 26s;
+  --particle-delay: -2s;
+}
+
+.marine-particles span:nth-child(7) {
+  --particle-x: 82%;
+  --particle-size: 5px;
+  --particle-duration: 22s;
+  --particle-delay: -19s;
+}
+
+.marine-particles span:nth-child(8) {
+  --particle-x: 94%;
+  --particle-size: 4px;
+  --particle-duration: 30s;
+  --particle-delay: -10s;
+}
+
+.marine-particles span:nth-child(9) {
+  --particle-x: 27%;
+  --particle-size: 2px;
+  --particle-duration: 16s;
+  --particle-delay: -6s;
+}
+
+.is-in-view > .marine-particles::before,
+.is-in-view > .marine-particles span {
+  animation-play-state: running;
+}
+
+.hero > .marine-particles {
+  z-index: 1;
+}
+
+.hero__content,
+.hero__coordinates,
+.hero > .depth-card,
+.hero__scroll,
+.hero__index,
+.depth-zone__coordinates,
+.biome-card__content {
+  z-index: 2;
+}
+
+.depth-zone__content,
+.biome-card__content {
+  position: relative;
+}
+
+.hero__coordinates,
+.depth-zone__coordinates {
+  position: absolute;
+}
+
+.depth-zone > .marine-particles,
+.biome-card > .marine-particles {
+  z-index: 0;
+}
+
+.depth-zone--abyss .marine-particles span,
+.biome-card--abyss .marine-particles span {
+  border-color: rgba(224, 172, 222, 0.58);
+  background: radial-gradient(circle at 34% 30%, rgba(255, 220, 241, 0.82), rgba(177, 104, 210, 0.14) 60%, transparent 75%);
+  box-shadow: 0 0 13px rgba(193, 109, 220, 0.28);
 }
 
 body.flashlight-on .flashlight-overlay {
@@ -1115,6 +1263,254 @@ body[data-depth-zone="abyss"] .depth-card__status {
   color: var(--biome-accent);
 }
 
+.abyss-map {
+  margin-top: 88px;
+  padding: clamp(22px, 4vw, 48px);
+  border: 1px solid rgba(166, 199, 201, 0.16);
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(32, 90, 101, 0.16), transparent 62%),
+    rgba(5, 13, 16, 0.72);
+}
+
+.abyss-map__heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 27px;
+}
+
+.abyss-map__heading .eyebrow {
+  margin: 0 0 15px;
+}
+
+.abyss-map__heading h3 {
+  margin: 0;
+  font-size: clamp(27px, 3.2vw, 42px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.05;
+}
+
+.abyss-map__heading h3 span {
+  color: #8fb9b6;
+}
+
+.abyss-map__intro {
+  max-width: 290px;
+  margin: 0 0 3px;
+  color: #a7b5b4;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.abyss-map__canvas {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2 / 1;
+  min-height: 280px;
+  border: 1px solid rgba(148, 193, 199, 0.17);
+  background:
+    radial-gradient(ellipse at 48% 48%, rgba(19, 61, 71, 0.5), transparent 70%),
+    #08171d;
+  color: #91c6cc;
+  isolation: isolate;
+}
+
+.abyss-map__world {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #8bb9bd;
+}
+
+.abyss-map__land {
+  fill: #25373a;
+  stroke: #66878a;
+  stroke-opacity: 0.48;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.abyss-map__labels {
+  fill: #a9c1c0;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  opacity: 0.65;
+}
+
+.abyss-map__coordinates {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  color: rgba(182, 208, 207, 0.64);
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.09em;
+  pointer-events: none;
+}
+
+.abyss-map__coordinates--top {
+  top: 12px;
+}
+
+.abyss-map__coordinates--bottom {
+  bottom: 12px;
+}
+
+.abyss-map__marker {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #c8dddd;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: clamp(6px, 0.72vw, 8px);
+  letter-spacing: 0.06em;
+  text-align: left;
+  transform: translate(-50%, -50%);
+}
+
+.abyss-map__marker--atlantic {
+  top: 43%;
+  left: 48%;
+}
+
+.abyss-map__marker--indo-pacific {
+  top: 55%;
+  left: 78%;
+  flex-direction: row-reverse;
+}
+
+.abyss-map__marker--pacific {
+  top: 48%;
+  left: 21%;
+}
+
+.abyss-map__marker--indian {
+  top: 60%;
+  left: 62%;
+}
+
+.abyss-map__marker--southern {
+  top: 85%;
+  left: 51%;
+}
+
+.abyss-map__pulse {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border: 1px solid #a6e2e2;
+  border-radius: 50%;
+  background: #66c2c8;
+  box-shadow: 0 0 12px rgba(102, 194, 200, 0.75);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.abyss-map__pulse::after {
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(127, 216, 218, 0.45);
+  border-radius: inherit;
+  content: "";
+  animation: map-pulse 2.8s ease-out infinite;
+}
+
+.abyss-map__label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 7px;
+  border: 1px solid rgba(174, 215, 216, 0.2);
+  background: rgba(5, 16, 20, 0.88);
+  white-space: nowrap;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.abyss-map__count {
+  color: #8ed3dc;
+  font-size: 8px;
+}
+
+.abyss-map__marker:hover .abyss-map__pulse,
+.abyss-map__marker[aria-pressed="true"] .abyss-map__pulse {
+  background: #e45b48;
+  transform: scale(1.3);
+}
+
+.abyss-map__marker:hover .abyss-map__label,
+.abyss-map__marker[aria-pressed="true"] .abyss-map__label {
+  border-color: rgba(228, 91, 72, 0.65);
+  background: rgba(34, 20, 22, 0.94);
+  color: #fff;
+}
+
+.abyss-map__marker:focus-visible {
+  outline: 2px solid #a6e2e2;
+  outline-offset: 5px;
+}
+
+.abyss-map__footer {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(166, 199, 201, 0.14);
+}
+
+.abyss-map__footer p,
+.abyss-map__footer button,
+.abyss-map__note {
+  color: #a9b9b8;
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.08em;
+}
+
+.abyss-map__footer p {
+  margin: 0;
+}
+
+.abyss-map__footer button {
+  padding: 8px 0 8px 10px;
+  border: 0;
+  background: transparent;
+  color: #8ed3dc;
+  cursor: pointer;
+}
+
+.abyss-map__footer button:hover {
+  color: #fff;
+}
+
+.abyss-map__note {
+  margin: 12px 0 0;
+  color: #748887;
+  font-size: 6px;
+  line-height: 1.7;
+}
+
+@keyframes map-pulse {
+  from {
+    opacity: 0.7;
+    transform: scale(0.65);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.65);
+  }
+}
+
 .biomes__note {
   display: flex;
   align-items: center;
@@ -1316,6 +1712,84 @@ body[data-depth-zone="abyss"] .depth-card__status {
   border: 1px solid var(--line);
   color: #859392;
   font-size: 9px;
+}
+
+.surprise-encounter {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 16px;
+  padding: 10px 15px;
+  border: 1px solid rgba(142, 211, 220, 0.2);
+  background:
+    linear-gradient(100deg, rgba(42, 101, 109, 0.14), rgba(7, 17, 19, 0.18) 68%),
+    #0a1619;
+}
+
+.surprise-encounter__copy {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+}
+
+.surprise-encounter__signal {
+  color: #8ed3dc;
+  font-size: 18px;
+  text-shadow: 0 0 14px rgba(142, 211, 220, 0.48);
+}
+
+.surprise-encounter__copy p {
+  margin: 0;
+  color: #d3e2e0;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.09em;
+}
+
+.surprise-encounter__copy p span {
+  color: #849796;
+}
+
+.surprise-encounter__button {
+  display: inline-flex;
+  min-height: 36px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 12px;
+  border: 1px solid rgba(142, 211, 220, 0.48);
+  background: rgba(67, 133, 143, 0.16);
+  color: #c9eded;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.07em;
+  transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.surprise-encounter__button:hover {
+  border-color: #9de2e4;
+  background: rgba(67, 133, 143, 0.3);
+  color: #fff;
+}
+
+.surprise-encounter__button > span:first-child {
+  color: #8ed3dc;
+  font-size: 15px;
+}
+
+.surprise-encounter__button > span:last-child {
+  color: #8ed3dc;
+  font-size: 12px;
+}
+
+.surprise-encounter__button:focus-visible {
+  outline: 2px solid #a6e2e2;
+  outline-offset: 3px;
 }
 
 .catalog-count {
@@ -1766,6 +2240,48 @@ body[data-depth-zone="abyss"] .depth-card__status {
   margin: 23px 0;
 }
 
+.species-dialog__risk {
+  margin-top: 21px;
+  padding: 14px 16px;
+  border: 1px solid rgba(228, 91, 72, 0.22);
+  background: linear-gradient(110deg, rgba(142, 49, 45, 0.13), rgba(11, 21, 23, 0.18));
+}
+
+.species-dialog__risk-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #a7b3b2;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+.species-dialog__risk-heading strong {
+  color: #ee947f;
+  font-size: 9px;
+  font-weight: 500;
+  text-align: right;
+}
+
+.species-dialog__risk-meter {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-top: 11px;
+}
+
+.species-dialog__risk-meter span {
+  height: 5px;
+  background: rgba(192, 213, 214, 0.13);
+}
+
+.species-dialog__risk-meter span.is-active {
+  background: linear-gradient(90deg, #a64840, #e26b56);
+  box-shadow: 0 0 9px rgba(226, 91, 72, 0.22);
+}
+
 .species-dialog__facts div {
   padding: 13px;
   border: 1px solid var(--line);
@@ -1842,6 +2358,34 @@ body[data-depth-zone="abyss"] .depth-card__status {
   }
   to {
     transform: scale(1.07) translate3d(0.6%, -0.35%, 0);
+  }
+}
+
+@keyframes sediment-drift {
+  from {
+    transform: translate3d(-1.5%, 0.8%, 0);
+    background-position: 0 0;
+  }
+  to {
+    transform: translate3d(1.5%, -0.8%, 0);
+    background-position: 100px -80px;
+  }
+}
+
+@keyframes particle-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.65);
+  }
+  12% {
+    opacity: 0.55;
+  }
+  76% {
+    opacity: 0.38;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(18px, -120vh, 0) scale(1.15);
   }
 }
 
@@ -2112,6 +2656,79 @@ body[data-depth-zone="abyss"] .depth-card__status {
     padding-bottom: 75px;
   }
 
+  .abyss-map {
+    margin-top: 58px;
+    padding: 20px 14px;
+  }
+
+  .abyss-map__heading {
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .abyss-map__heading h3 {
+    font-size: 33px;
+  }
+
+  .abyss-map__intro {
+    max-width: 340px;
+    margin-top: 12px;
+    font-size: 10px;
+  }
+
+  .abyss-map__canvas {
+    height: 300px;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+
+  .abyss-map__labels {
+    font-size: 17px;
+  }
+
+  .abyss-map__marker {
+    gap: 5px;
+    font-size: 6px;
+  }
+
+  .abyss-map__marker--indian {
+    top: 67%;
+    left: 58%;
+  }
+
+  .abyss-map__label {
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .abyss-map__coordinates {
+    left: 8px;
+    font-size: 6px;
+  }
+
+  .abyss-map__coordinates--bottom {
+    display: none;
+  }
+
+  .abyss-map__footer {
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+
+  .abyss-map__footer p {
+    max-width: 220px;
+    line-height: 1.7;
+  }
+
+  .abyss-map__footer button {
+    flex: 0 0 auto;
+    font-size: 6px;
+  }
+
+  .abyss-map__note {
+    font-size: 6px;
+  }
+
   .biomes__heading {
     margin-bottom: 28px;
   }
@@ -2326,6 +2943,26 @@ body[data-depth-zone="abyss"] .depth-card__status {
     display: grid;
     gap: 8px;
     padding: 10px 0;
+  }
+
+  .surprise-encounter {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 11px;
+    padding: 12px;
+  }
+
+  .surprise-encounter__copy {
+    align-items: flex-start;
+  }
+
+  .surprise-encounter__copy p {
+    font-size: 7px;
+    line-height: 1.8;
+  }
+
+  .surprise-encounter__button {
+    width: 100%;
   }
 
   .filter-list {
@@ -2590,9 +3227,15 @@ body[data-depth-zone="abyss"] .depth-card__status {
   .depth-zone__image,
   .biome-card__image,
   .species-card__image,
-  .expedition__image-wrap img {
+  .expedition__image-wrap img,
+  .marine-particles::before,
+  .marine-particles span {
     animation: none !important;
     transform: none !important;
+  }
+
+  .marine-particles {
+    display: none;
   }
 
   .flashlight-overlay {

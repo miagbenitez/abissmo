@@ -7,6 +7,12 @@ const species = [
     type: "predator",
     tags: ["predator", "biome-open"],
     danger: "DEPREDADOR",
+    riskLevel: 5,
+    riskLabel: "MUY ALTO",
+    size: "4 — 6 m",
+    longevity: "70+ años",
+    diet: "Peces, focas y tortugas",
+    regions: ["atlantic", "indo-pacific", "pacific", "indian"],
     depth: "0 — 1.200 m",
     habitat: "Aguas templadas y costeras",
     threat: "Mordida de gran potencia",
@@ -23,6 +29,12 @@ const species = [
     type: "venom",
     tags: ["venom", "biome-reef", "biome-open"],
     danger: "VENENO NEUROTÓXICO",
+    riskLevel: 5,
+    riskLabel: "MUY ALTO",
+    size: "Campana: 20–30 cm; tentáculos: hasta 3 m",
+    longevity: "Aprox. 1 año",
+    diet: "Peces pequeños y crustáceos",
+    regions: ["indo-pacific", "pacific", "indian"],
     depth: "Superficie — 20 m",
     habitat: "Indo-Pacífico tropical",
     threat: "Veneno de acción rápida",
@@ -39,6 +51,12 @@ const species = [
     type: "venom",
     tags: ["venom", "deep", "biome-reef"],
     danger: "TOXINA LETAL",
+    riskLevel: 5,
+    riskLabel: "MUY ALTO",
+    size: "Hasta 15 cm",
+    longevity: "1 — 2 años",
+    diet: "Cangrejos, camarones y peces",
+    regions: ["indo-pacific", "pacific"],
     depth: "0 — 50 m",
     habitat: "Arrecifes del Pacífico",
     threat: "Tetrodotoxina paralizante",
@@ -55,6 +73,12 @@ const species = [
     type: "deep",
     tags: ["predator", "deep", "biome-abyss"],
     danger: "CAZADOR ABISAL",
+    riskLevel: 1,
+    riskLabel: "BAJO",
+    size: "Hasta 18 cm",
+    longevity: "Sin datos concluyentes",
+    diet: "Pequeños peces y crustáceos",
+    regions: ["atlantic", "southern"],
     depth: "200 — 2.000 m",
     habitat: "Océanos Atlántico y Antártico",
     threat: "Emboscada en oscuridad total",
@@ -68,11 +92,15 @@ const species = [
 const grid = document.querySelector("#species-grid");
 const searchInput = document.querySelector("#species-search");
 const catalogCount = document.querySelector("#catalog-count");
+const surpriseEncounter = document.querySelector("#surprise-encounter");
 const dialog = document.querySelector("#species-dialog");
 const activeFilters = document.querySelectorAll("[data-filter]");
 const biomeFilterButtons = document.querySelectorAll("[data-biome-filter]");
 const biomeFilterNotice = document.querySelector("#biome-filter-notice");
 const biomeFilterLabel = document.querySelector("#biome-filter-label");
+const mapRegionButtons = document.querySelectorAll("[data-map-region]");
+const mapRegionStatus = document.querySelector("#map-region-status");
+const clearMapFilter = document.querySelector("#clear-map-filter");
 const hero = document.querySelector(".hero");
 const descent = document.querySelector("#descenso");
 const depthZones = [...document.querySelectorAll(".depth-zone")];
@@ -80,8 +108,11 @@ const depthMarkers = document.querySelectorAll(".depth-console__marker");
 const depthConsole = document.querySelector("#depth-console");
 const navLinks = document.querySelectorAll(".main-nav__link");
 const flashlightToggle = document.querySelector("#flashlight-toggle");
+const immersionToggle = document.querySelector("#immersion-toggle");
+const immersionStatus = document.querySelector("#immersion-status");
 let pointerFrame = 0;
 let pointerPosition = null;
+let ambientAudio = null;
 const depthLabels = {
   surface: "ZONA FÓTICA",
   twilight: "ZONA DE PENUMBRA",
@@ -104,28 +135,63 @@ const biomeLabels = {
   open: "AGUAS ABIERTAS",
   abyss: "ZONA ABISAL"
 };
+const oceanLabels = {
+  atlantic: "ATLÁNTICO NORTE",
+  "indo-pacific": "INDO-PACÍFICO",
+  pacific: "PACÍFICO",
+  indian: "OCÉANO ÍNDICO",
+  southern: "OCÉANO AUSTRAL"
+};
 const ambientMotionObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     entry.target.classList.toggle("is-in-view", entry.isIntersecting);
   });
 }, { threshold: 0.05 });
 const ambientMotionTargets = ".hero, .depth-zone, .biome-card, .species-card, .expedition__image-wrap";
+const particleTargets = [hero, ...depthZones, ...document.querySelectorAll(".biome-card")];
+const particleCount = 9;
 let selectedFilter = "all";
 let selectedBiome = null;
+let selectedRegion = null;
 let activeDepthZone = null;
 let depthFrame = 0;
 const depthRatios = new Map([[hero, 0], ...depthZones.map((zone) => [zone, 0])]);
+
+particleTargets.forEach((target) => {
+  const field = document.createElement("div");
+  field.className = "marine-particles";
+  field.setAttribute("aria-hidden", "true");
+
+  for (let index = 0; index < particleCount; index += 1) {
+    field.append(document.createElement("span"));
+  }
+
+  target.append(field);
+});
 
 function renderSpecies() {
   const query = searchInput.value.trim().toLocaleLowerCase("es");
   const matchingSpecies = species.filter((animal) => {
     const matchesFilter = selectedFilter === "all" || animal.tags.includes(selectedFilter);
     const matchesBiome = !selectedBiome || animal.tags.includes(`biome-${selectedBiome}`);
+    const matchesRegion = !selectedRegion || animal.regions.includes(selectedRegion);
     const searchableText = `${animal.name} ${animal.scientific} ${animal.habitat}`.toLocaleLowerCase("es");
-    return matchesFilter && matchesBiome && searchableText.includes(query);
+    return matchesFilter && matchesBiome && matchesRegion && searchableText.includes(query);
   });
 
   catalogCount.textContent = `${String(matchingSpecies.length).padStart(2, "0")} REGISTROS ENCONTRADOS`;
+  mapRegionButtons.forEach((button) => {
+    const region = button.dataset.mapRegion;
+    const count = species.filter((animal) => animal.regions.includes(region)).length;
+    button.setAttribute("aria-pressed", String(region === selectedRegion));
+    button.querySelector(".abyss-map__count").textContent = String(count).padStart(2, "0");
+    button.setAttribute("aria-label", `Explorar ${oceanLabels[region].toLocaleLowerCase("es")}: ${count} ${
+      count === 1 ? "especie" : "especies"
+    }`);
+  });
+  mapRegionStatus.textContent = selectedRegion
+    ? `ZONA SELECCIONADA: ${oceanLabels[selectedRegion]} · MOSTRANDO ESPECIES REGISTRADAS`
+    : "SELECCIONÁ UNA ZONA PARA EXPLORAR SUS ESPECIES";
 
   if (matchingSpecies.length === 0) {
     grid.innerHTML = '<p class="empty-state">NINGÚN REGISTRO COINCIDE CON LA BÚSQUEDA.</p>';
@@ -144,7 +210,7 @@ function renderSpecies() {
         <p class="species-card__latin">${animal.scientific}</p>
         <div class="species-card__meta">
           <span>${animal.depth.toUpperCase()}</span>
-          <span>RIESGO: ALTO</span>
+          <span>PELIGRO: ${animal.riskLabel}</span>
         </div>
         <button class="species-card__button" type="button" data-species="${animal.id}" aria-label="Abrir ficha de ${animal.name}">
           <span>ABRIR REGISTRO</span><span aria-hidden="true">↗</span>
@@ -165,6 +231,14 @@ function openSpeciesRecord(animal) {
   document.querySelector("#dialog-habitat").textContent = animal.habitat;
   document.querySelector("#dialog-depth").textContent = animal.depth;
   document.querySelector("#dialog-threat").textContent = animal.threat;
+  document.querySelector("#dialog-size").textContent = animal.size;
+  document.querySelector("#dialog-longevity").textContent = animal.longevity;
+  document.querySelector("#dialog-diet").textContent = animal.diet;
+  document.querySelector("#dialog-risk-value").textContent = `${animal.riskLevel} / 5 · ${animal.riskLabel}`;
+  document.querySelector("#dialog-risk-meter").setAttribute("aria-valuenow", String(animal.riskLevel));
+  document.querySelectorAll("#dialog-risk-meter span").forEach((segment, index) => {
+    segment.classList.toggle("is-active", index < animal.riskLevel);
+  });
   dialog.showModal();
 }
 
@@ -208,6 +282,21 @@ biomeFilterButtons.forEach((button) => {
 document.querySelector("#clear-biome-filter").addEventListener("click", () => selectBiome(null, false));
 searchInput.addEventListener("input", renderSpecies);
 
+mapRegionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    selectedRegion = button.dataset.mapRegion;
+    renderSpecies();
+    document.querySelector("#especies").scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+    });
+  });
+});
+
+clearMapFilter.addEventListener("click", () => {
+  selectedRegion = null;
+  renderSpecies();
+});
+
 grid.addEventListener("click", (event) => {
   const trigger = event.target.closest("[data-species]");
   if (!trigger) return;
@@ -216,17 +305,170 @@ grid.addEventListener("click", (event) => {
   if (animal) openSpeciesRecord(animal);
 });
 
+surpriseEncounter.addEventListener("click", () => {
+  const query = searchInput.value.trim().toLocaleLowerCase("es");
+  const availableSpecies = species.filter((animal) => {
+    const matchesFilter = selectedFilter === "all" || animal.tags.includes(selectedFilter);
+    const matchesBiome = !selectedBiome || animal.tags.includes(`biome-${selectedBiome}`);
+    const matchesRegion = !selectedRegion || animal.regions.includes(selectedRegion);
+    const searchableText = `${animal.name} ${animal.scientific} ${animal.habitat}`.toLocaleLowerCase("es");
+    return matchesFilter && matchesBiome && matchesRegion && searchableText.includes(query);
+  });
+
+  if (availableSpecies.length === 0) {
+    catalogCount.textContent = "NO HAY ENCUENTROS EN ESTE REGISTRO. CAMBIÁ LOS FILTROS E INTENTÁ OTRA VEZ.";
+    searchInput.focus();
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * availableSpecies.length);
+  openSpeciesRecord(availableSpecies[randomIndex]);
+});
+
 document.querySelector(".species-dialog__close").addEventListener("click", () => dialog.close());
 dialog.addEventListener("click", (event) => {
   if (event.target === dialog) dialog.close();
 });
 
-document.querySelector("#immersion-toggle").addEventListener("click", (event) => {
-  const button = event.currentTarget;
-  const isImmersed = button.getAttribute("aria-pressed") !== "true";
-  button.setAttribute("aria-pressed", String(isImmersed));
-  document.body.classList.toggle("immersion-mode", isImmersed);
-  document.querySelector(".sound-toggle__label").textContent = isImmersed ? "EN INMERSIÓN" : "INMERSIÓN";
+function scheduleAmbientBubble() {
+  if (!ambientAudio) return;
+
+  const { context, masterGain } = ambientAudio;
+  const now = context.currentTime;
+  const bubble = context.createOscillator();
+  const bubbleGain = context.createGain();
+  bubble.type = "sine";
+  bubble.frequency.setValueAtTime(340 + Math.random() * 180, now);
+  bubble.frequency.exponentialRampToValueAtTime(170 + Math.random() * 80, now + 0.38);
+  bubbleGain.gain.setValueAtTime(0.0001, now);
+  bubbleGain.gain.exponentialRampToValueAtTime(0.018, now + 0.04);
+  bubbleGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+  bubble.connect(bubbleGain);
+  bubbleGain.connect(masterGain);
+  bubble.start(now);
+  bubble.stop(now + 0.45);
+
+  ambientAudio.bubbleTimer = window.setTimeout(scheduleAmbientBubble, 3200 + Math.random() * 4200);
+}
+
+async function startAmbientAudio() {
+  const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextConstructor) {
+    throw new Error("Este navegador no admite audio ambiental.");
+  }
+
+  const context = new AudioContextConstructor();
+
+  try {
+    await context.resume();
+
+    const now = context.currentTime;
+    const masterGain = context.createGain();
+    const noiseFilter = context.createBiquadFilter();
+    const noiseGain = context.createGain();
+    const noiseSource = context.createBufferSource();
+    const noiseBuffer = context.createBuffer(1, context.sampleRate * 2, context.sampleRate);
+    const noiseSamples = noiseBuffer.getChannelData(0);
+
+    for (let index = 0; index < noiseSamples.length; index += 1) {
+      noiseSamples[index] = Math.random() * 2 - 1;
+    }
+
+    noiseSource.buffer = noiseBuffer;
+    noiseSource.loop = true;
+    noiseFilter.type = "lowpass";
+    noiseFilter.frequency.value = 620;
+    noiseFilter.Q.value = 0.55;
+    noiseGain.gain.value = 0.12;
+    masterGain.gain.setValueAtTime(0.0001, now);
+    masterGain.gain.setTargetAtTime(0.34, now, 0.9);
+    noiseSource.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(masterGain);
+    masterGain.connect(context.destination);
+
+    const current = context.createOscillator();
+    const currentGain = context.createGain();
+    current.type = "sine";
+    current.frequency.value = 56;
+    currentGain.gain.value = 0.035;
+    current.connect(currentGain);
+    currentGain.connect(masterGain);
+
+    const swell = context.createOscillator();
+    const swellGain = context.createGain();
+    swell.type = "sine";
+    swell.frequency.value = 0.1;
+    swellGain.gain.value = 0.035;
+    swell.connect(swellGain);
+    swellGain.connect(noiseGain.gain);
+
+    noiseSource.start(now);
+    current.start(now);
+    swell.start(now);
+    ambientAudio = {
+      context,
+      masterGain,
+      sources: [noiseSource, current, swell],
+      bubbleTimer: 0
+    };
+    scheduleAmbientBubble();
+  } catch (error) {
+    if (context.state !== "closed") await context.close();
+    throw error;
+  }
+}
+
+async function stopAmbientAudio() {
+  if (!ambientAudio) return;
+
+  const audio = ambientAudio;
+  ambientAudio = null;
+  window.clearTimeout(audio.bubbleTimer);
+
+  const stopAt = audio.context.currentTime + 0.45;
+  audio.masterGain.gain.setTargetAtTime(0, audio.context.currentTime, 0.1);
+  audio.sources.forEach((source) => source.stop(stopAt));
+  await new Promise((resolve) => window.setTimeout(resolve, 500));
+  if (audio.context.state !== "closed") await audio.context.close();
+}
+
+immersionToggle.addEventListener("click", async () => {
+  const isImmersed = immersionToggle.getAttribute("aria-pressed") !== "true";
+  immersionToggle.disabled = true;
+  immersionStatus.textContent = "";
+
+  if (isImmersed) {
+    try {
+      await startAmbientAudio();
+      immersionToggle.setAttribute("aria-pressed", "true");
+      immersionToggle.setAttribute("aria-label", "Desactivar el modo inmersión y el sonido submarino");
+      document.body.classList.add("immersion-mode");
+      immersionToggle.querySelector(".sound-toggle__label").textContent = "EN INMERSIÓN";
+      immersionStatus.textContent = "Sonido submarino activado.";
+    } catch (error) {
+      immersionToggle.setAttribute("aria-pressed", "false");
+      immersionStatus.textContent = `No se pudo activar el sonido submarino. ${
+        error instanceof Error ? error.message : "Probá nuevamente más tarde."
+      }`;
+    }
+  } else {
+    immersionToggle.setAttribute("aria-pressed", "false");
+    immersionToggle.setAttribute("aria-label", "Activar el modo inmersión y el sonido submarino");
+    document.body.classList.remove("immersion-mode");
+    immersionToggle.querySelector(".sound-toggle__label").textContent = "INMERSIÓN";
+
+    try {
+      await stopAmbientAudio();
+      immersionStatus.textContent = "Sonido submarino desactivado.";
+    } catch (error) {
+      immersionStatus.textContent = `No se pudo cerrar el sonido submarino. ${
+        error instanceof Error ? error.message : "Cerrá la pestaña para detenerlo."
+      }`;
+    }
+  }
+
+  immersionToggle.disabled = false;
 });
 
 function updateFlashlightPosition(event) {
