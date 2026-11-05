@@ -30,6 +30,7 @@
         <a class="main-nav__link" href="#descenso">Descenso</a>
         <a class="main-nav__link" href="#biomas">Biomas</a>
         <a class="main-nav__link" href="#especies">Especies</a>
+        <a class="main-nav__link" href="#conservacion">Ciencia</a>
         <a class="main-nav__link" href="#expedicion">La expedición</a>
       </nav>
 
@@ -124,6 +125,18 @@
               <span>PROFUNDIDAD <strong>0 — 200 M</strong></span>
               <span>LUZ <strong>PLENA · AZUL</strong></span>
             </div>
+            <section class="depth-quiz" data-correct="fotic" data-fact="La zona fótica llega aproximadamente hasta los 200 metros, donde aún penetra luz solar.">
+              <div class="depth-quiz__meta">
+                <span>SONDEO 01 · SEÑAL DE LUZ</span>
+                <span>RESPONDIDAS <strong data-depth-quiz-progress>00 / 03</strong></span>
+              </div>
+              <h4 id="surface-quiz-title">¿Hasta dónde llega la zona fótica?</h4>
+              <div class="depth-quiz__answers" role="group" aria-labelledby="surface-quiz-title">
+                <button type="button" data-quiz-answer="fotic">Hasta 200 m</button>
+                <button type="button" data-quiz-answer="mesopelagic">Hasta 1.000 m</button>
+              </div>
+              <p class="depth-quiz__feedback" role="status" aria-live="polite" hidden></p>
+            </section>
             <a class="button button--ghost" href="#zona-penumbra">
               <span>BAJAR A LA PENUMBRA</span><span aria-hidden="true">↓</span>
             </a>
@@ -146,6 +159,18 @@
               <span>PROFUNDIDAD <strong>200 — 1.000 M</strong></span>
               <span>LUZ <strong>ESCASA · AZUL PROFUNDO</strong></span>
             </div>
+            <section class="depth-quiz" data-correct="dim" data-fact="En la zona mesopelágica aún llega una pequeña cantidad de luz solar, pero no alcanza para iluminar como en la superficie.">
+              <div class="depth-quiz__meta">
+                <span>SONDEO 02 · SEÑAL DE LUZ</span>
+                <span>RESPONDIDAS <strong data-depth-quiz-progress>00 / 03</strong></span>
+              </div>
+              <h4 id="twilight-quiz-title">¿Qué pasa con la luz solar en la penumbra?</h4>
+              <div class="depth-quiz__answers" role="group" aria-labelledby="twilight-quiz-title">
+                <button type="button" data-quiz-answer="dim">Llega muy débil</button>
+                <button type="button" data-quiz-answer="none">Desaparece por completo</button>
+              </div>
+              <p class="depth-quiz__feedback" role="status" aria-live="polite" hidden></p>
+            </section>
             <a class="button button--ghost" href="#zona-abisal">
               <span>CONTINUAR AL ABISMO</span><span aria-hidden="true">↓</span>
             </a>
@@ -168,6 +193,18 @@
               <span>PROFUNDIDAD <strong>1.000 — 4.000 M</strong></span>
               <span>LUZ <strong>NINGUNA · BIOILUMINISCENCIA</strong></span>
             </div>
+            <section class="depth-quiz" data-correct="bioluminescence" data-fact="Muchas especies producen su propia luz mediante bioluminiscencia, una adaptación útil en la oscuridad del océano profundo.">
+              <div class="depth-quiz__meta">
+                <span>SONDEO 03 · SEÑAL DE LUZ</span>
+                <span>RESPONDIDAS <strong data-depth-quiz-progress>00 / 03</strong></span>
+              </div>
+              <h4 id="abyss-quiz-title">¿Cómo producen luz muchas criaturas abisales?</h4>
+              <div class="depth-quiz__answers" role="group" aria-labelledby="abyss-quiz-title">
+                <button type="button" data-quiz-answer="sunlight">Reflejan la luz solar</button>
+                <button type="button" data-quiz-answer="bioluminescence">Con bioluminiscencia</button>
+              </div>
+              <p class="depth-quiz__feedback" role="status" aria-live="polite" hidden></p>
+            </section>
             <a class="button button--ghost" href="#especies">
               <span>ABRIR ARCHIVO DE CRIATURAS</span><span aria-hidden="true">↗</span>
             </a>
@@ -201,7 +238,7 @@
         </div>
 
         <div class="biome-grid" aria-label="Explorar biomas oceánicos">
-          <article class="biome-card biome-card--reef">
+          <article class="biome-card biome-card--reef" data-biome-id="reef">
             <img class="biome-card__image"
               src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Colorful_underwater_landscape_of_a_coral_reef.jpg/1920px-Colorful_underwater_landscape_of_a_coral_reef.jpg"
               alt="Corales de colores en un arrecife bañado por la luz solar"
@@ -220,7 +257,7 @@
             </div>
           </article>
 
-          <article class="biome-card biome-card--open">
+          <article class="biome-card biome-card--open" data-biome-id="open">
             <img class="biome-card__image"
               src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Tibur%C3%B3n_azul_%28Prionace_glauca%29_y_submarinista%2C_canal_Fayal-Pico%2C_islas_Azores%2C_Portugal%2C_2020-07-27%2C_DD_08.jpg/1920px-Tibur%C3%B3n_azul_%28Prionace_glauca%29_y_submarinista%2C_canal_Fayal-Pico%2C_islas_Azores%2C_Portugal%2C_2020-07-27%2C_DD_08.jpg"
               alt="Tiburón azul y buzo en las aguas abiertas del Atlántico"
@@ -239,7 +276,7 @@
             </div>
           </article>
 
-          <article class="biome-card biome-card--abyss">
+          <article class="biome-card biome-card--abyss" data-biome-id="abyss">
             <img class="biome-card__image"
               src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Melanocetus_johnsonii_by_NOAA.jpg/1920px-Melanocetus_johnsonii_by_NOAA.jpg"
               alt="Pez rape bioluminiscente en la oscuridad de las profundidades"
@@ -361,6 +398,37 @@
             <span aria-hidden="true">↯</span> ENCONTRAR UNA ESPECIE <span aria-hidden="true">↗</span>
           </button>
         </div>
+        <section class="species-comparator" aria-labelledby="comparator-title">
+          <div class="species-comparator__heading">
+            <div>
+              <p class="eyebrow"><span class="eyebrow__line"></span> ANÁLISIS CRUZADO</p>
+              <h3 id="comparator-title">Dos criaturas.<br><span>Un solo encuentro.</span></h3>
+            </div>
+            <p>Elegí dos registros para poner sus características frente a frente.</p>
+          </div>
+          <div class="species-comparator__controls">
+            <label>
+              <span>PRIMER REGISTRO</span>
+              <select id="compare-species-one" aria-label="Elegir primera especie para comparar">
+                <option value="">ELEGÍ UNA ESPECIE</option>
+              </select>
+            </label>
+            <span class="species-comparator__versus" aria-hidden="true">VS</span>
+            <label>
+              <span>SEGUNDO REGISTRO</span>
+              <select id="compare-species-two" aria-label="Elegir segunda especie para comparar">
+                <option value="">ELEGÍ UNA ESPECIE</option>
+              </select>
+            </label>
+            <button class="species-comparator__button" id="compare-species" type="button" disabled>
+              COMPARAR <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+          <p class="species-comparator__status" id="comparator-status" role="status" aria-live="polite">
+            SELECCIONÁ DOS ESPECIES DISTINTAS PARA INICIAR EL ANÁLISIS.
+          </p>
+          <div class="species-comparison" id="species-comparison" aria-live="polite" hidden></div>
+        </section>
 
         <div class="biome-filter-notice" id="biome-filter-notice" hidden>
           <span class="biome-filter-notice__indicator" aria-hidden="true"></span>
@@ -371,6 +439,22 @@
         <div class="species-grid" id="species-grid"></div>
       </section>
 
+      <section class="conservation section-shell" id="conservacion" aria-labelledby="conservation-title">
+        <div class="section-heading conservation__heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line"></span> CIENCIA · EVIDENCIA · CONSERVACIÓN</p>
+            <h2 id="conservation-title">El peligro también<br><span>las alcanza a ellas.</span></h2>
+          </div>
+          <p class="section-heading__aside">
+            Las amenazas humanas no son una escala editorial: son presiones reales. Separamos las evaluaciones documentadas de los riesgos para el hábitat que aún no tienen un impacto poblacional confirmado.
+          </p>
+        </div>
+        <div class="conservation__grid" id="conservation-grid"></div>
+        <p class="conservation__note">
+          ESTADO DE CONSERVACIÓN Y PELIGRO PARA LAS PERSONAS SON COSAS DISTINTAS. LAS CATEGORÍAS GLOBALES DEPENDEN DE EVALUACIONES CIENTÍFICAS; LA ESCALA DE PELIGRO ABISSMO ES EDITORIAL.
+        </p>
+      </section>
+
       <section class="expedition section-shell" id="expedicion" aria-labelledby="expedition-title">
         <div class="expedition__image-wrap">
           <img
@@ -378,6 +462,17 @@
             alt="Una silueta se interna en las aguas azules"
             loading="lazy"
           >
+          <div class="expedition__camera" aria-hidden="true">
+            <span class="expedition__camera-live"><i></i> REC · CAM-04</span>
+            <span class="expedition__camera-data">SEÑAL ENCRIPTADA <b>98.4%</b></span>
+            <span class="expedition__camera-frame"></span>
+            <span class="expedition__camera-scanline"></span>
+            <span class="expedition__camera-light"></span>
+            <span class="expedition__camera-signal">
+              <i></i><i></i><i></i><i></i><i></i>
+              <b>TRANSMISIÓN ESTABLE</b>
+            </span>
+          </div>
           <span class="expedition__image-caption">CÁMARA 04 · TRANSMISIÓN EN VIVO</span>
           <span class="expedition__crosshair" aria-hidden="true">+</span>
         </div>
@@ -395,6 +490,112 @@
           </div>
           <a class="text-link" href="#especies">EXPLORAR LOS REGISTROS <span aria-hidden="true">↗</span></a>
         </div>
+      </section>
+
+      <section class="sound-archive section-shell" aria-labelledby="sound-archive-title">
+        <div class="sound-archive__heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line"></span> ARCHIVO SONORO · GRABACIONES REALES</p>
+            <h2 id="sound-archive-title">El océano también<br><span>deja señales.</span></h2>
+          </div>
+          <p>Escuchá registros submarinos de NOAA. Sonidos de hábitat y de otras especies: no son vocalizaciones de los animales de nuestro archivo.</p>
+        </div>
+        <div class="sound-archive__grid">
+          <article class="sound-record">
+            <div class="sound-record__topline">
+              <span>HÁBITAT · ARRECIFE</span>
+              <span class="sound-record__index">AUD-01</span>
+            </div>
+            <div class="sound-record__wave" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <h3>Camarones pistola</h3>
+            <p class="sound-record__description">Chasquidos submarinos de camarones pistola (<i>Alpheus</i> spp.), grabados por la Passive Acoustics Branch de NOAA.</p>
+            <audio controls preload="none" aria-label="Escuchar chasquidos de camarones pistola grabados por NOAA">
+              <source src="https://www.fisheries.noaa.gov/s3/2023-04/Alsp-snaps-NOAA-PAGroup-02-amplified-snapping-shrimp-clip.mp3" type="audio/mpeg">
+              Tu navegador no admite audio HTML.
+            </audio>
+            <a class="sound-record__source" href="https://www.fisheries.noaa.gov/national/science-data/sounds-ocean-fish-and-invertebrates" target="_blank" rel="noreferrer">FUENTE Y CRÉDITOS · NOAA <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="sound-record">
+            <div class="sound-record__topline">
+              <span>PAISAJE MARINO · AMBIENTE</span>
+              <span class="sound-record__index">AUD-02</span>
+            </div>
+            <div class="sound-record__wave" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <h3>Océano tranquilo</h3>
+            <p class="sound-record__description">Grabación ambiental publicada por NOAA, atribuida a AWI y Van Opzeeland. No corresponde a un sitio específico del catálogo.</p>
+            <audio controls preload="none" aria-label="Escuchar la grabación ambiental de océano tranquilo de NOAA y AWI">
+              <source src="https://www.fisheries.noaa.gov/s3/2023-04/Quiet-AWI-Van-Opzeeland-02-quiet-ocean-clip.mp3" type="audio/mpeg">
+              Tu navegador no admite audio HTML.
+            </audio>
+            <a class="sound-record__source" href="https://www.fisheries.noaa.gov/national/science-data/sounds-ocean-environmental-and-anthropogenic" target="_blank" rel="noreferrer">FUENTE Y CRÉDITOS · NOAA / AWI <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="sound-record">
+            <div class="sound-record__topline">
+              <span>OCÉANO ABIERTO · MAMÍFERO</span>
+              <span class="sound-record__index">AUD-03</span>
+            </div>
+            <div class="sound-record__wave" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <h3>Ballena jorobada</h3>
+            <p class="sound-record__description">Canto de ballena jorobada (<i>Megaptera novaeangliae</i>) grabado por la Passive Acoustics Branch de NOAA; no es una especie del catálogo.</p>
+            <audio controls preload="none" aria-label="Escuchar el canto de ballena jorobada grabado por NOAA">
+              <source src="https://www.fisheries.noaa.gov/s3/2023-04/Meno-song-NOAA-PAGroup-13-humpback-clip.mp3" type="audio/mpeg">
+              Tu navegador no admite audio HTML.
+            </audio>
+            <a class="sound-record__source" href="https://www.fisheries.noaa.gov/national/science-data/sounds-ocean-mammals" target="_blank" rel="noreferrer">FUENTE Y CRÉDITOS · NOAA <span aria-hidden="true">↗</span></a>
+          </article>
+        </div>
+        <p class="sound-archive__status" id="sound-archive-status" role="status" aria-live="polite">
+          LAS GRABACIONES SE CARGAN DESDE NOAA AL REPRODUCIRLAS. SE NECESITA CONEXIÓN A INTERNET.
+        </p>
+      </section>
+
+      <section class="exploration-journal section-shell" id="bitacora" aria-labelledby="journal-title">
+        <div class="exploration-journal__heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line"></span> ARCHIVO PERSONAL · ABISSMO</p>
+            <h2 id="journal-title">Lo que encontraste<br><span>no se pierde.</span></h2>
+          </div>
+          <p>Un registro privado de las zonas y criaturas que descubrís. Esta bitácora se guarda en este navegador.</p>
+        </div>
+        <div class="exploration-journal__progress">
+          <div>
+            <span>PROGRESO DE EXPLORACIÓN</span>
+            <strong id="journal-total">00 / 10</strong>
+          </div>
+          <div
+            class="exploration-journal__track"
+            id="journal-progress"
+            role="progressbar"
+            aria-label="Progreso de exploración"
+            aria-valuemin="0"
+            aria-valuemax="10"
+            aria-valuenow="0"
+          >
+            <span id="journal-progress-fill"></span>
+          </div>
+        </div>
+        <p class="exploration-journal__status" id="journal-status" role="status" aria-live="polite"></p>
+        <div class="exploration-journal__categories">
+          <section class="exploration-journal__category" aria-labelledby="journal-zones-title">
+            <h3 id="journal-zones-title">ZONAS <span id="journal-zones-count">00 / 03</span></h3>
+            <ul id="journal-zones-list"></ul>
+          </section>
+          <section class="exploration-journal__category" aria-labelledby="journal-biomes-title">
+            <h3 id="journal-biomes-title">BIOMAS <span id="journal-biomes-count">00 / 03</span></h3>
+            <ul id="journal-biomes-list"></ul>
+          </section>
+          <section class="exploration-journal__category" aria-labelledby="journal-species-title">
+            <h3 id="journal-species-title">ESPECIES <span id="journal-species-count">00 / 04</span></h3>
+            <ul id="journal-species-list"></ul>
+          </section>
+        </div>
+        <button class="exploration-journal__reset" id="journal-reset" type="button">REINICIAR BITÁCORA <span aria-hidden="true">↺</span></button>
       </section>
 
       <section class="warning-band" aria-label="Advertencia">
@@ -432,6 +633,13 @@
         <h2 id="dialog-title"></h2>
         <p class="species-dialog__latin" id="dialog-latin"></p>
         <p class="species-dialog__description" id="dialog-description"></p>
+        <section class="species-dialog__conservation" aria-labelledby="dialog-conservation-title">
+          <h3 id="dialog-conservation-title">CIENCIA Y CONSERVACIÓN</h3>
+          <p id="dialog-conservation-status"></p>
+          <p id="dialog-conservation-threat"></p>
+          <h4>FUENTES DEL REGISTRO</h4>
+          <ul id="dialog-sources"></ul>
+        </section>
         <div class="species-dialog__risk">
           <div class="species-dialog__risk-heading">
             <span>PELIGRO POTENCIAL · ESCALA ABISSMO</span>
